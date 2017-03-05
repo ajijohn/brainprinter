@@ -14,6 +14,7 @@ const twilio = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKE
 const Linkedin = require('node-linkedin')(process.env.LINKEDIN_ID, process.env.LINKEDIN_SECRET, process.env.LINKEDIN_CALLBACK_URL);
 const clockwork = require('clockwork')({ key: process.env.CLOCKWORK_KEY });
 const paypal = require('paypal-rest-sdk');
+const Request = require('../models/Request');
 const lob = require('lob')(process.env.LOB_KEY);
 const ig = require('instagram-node').instagram();
 const foursquare = require('node-foursquare')({
@@ -589,8 +590,21 @@ exports.getFileUpload = (req, res, next) => {
 };
 
 exports.postFileUpload = (req, res, next) => {
-  req.flash('success', { msg: 'File was uploaded successfully.' });
-  res.redirect('/api/upload');
+  const request = new Request({
+      customerEmail: req.user.email,
+      inputFile: req.file['path'],
+      outputFile:"",
+      status:"upload_finished",
+      customerName:req.user.profile.name
+
+    });
+
+    request.save((err) => {
+        if (err) { return next(err); }
+
+    });
+    req.flash('success', { msg: 'File was uploaded successfully.' });
+    res.redirect('/api/upload');
 };
 
 /**
