@@ -1,6 +1,5 @@
 import requests
 import pandas as pd
-from pymongo import MongoClient
 
 #################################
 #  Table format:
@@ -9,13 +8,6 @@ from pymongo import MongoClient
 #
 #################################
 
-
-def db_connect():
-    client = MongoClient('localhost', 27017)
-    db = client.test
-    requests = db.requests
-    df = pd.DataFrame(list(requests.find()))
-    print(df.columns)
 
 
 
@@ -115,9 +107,7 @@ if __name__ == "__main__":
         #    row = pd.read_csv(table_name,index_col=numline)
         #    process_request(row)
         #    old_numline = numline
-    while False:
+    while True:
         ping_table()
         time.sleep(5)
         #threading.Timer(5, ping_table).start()
-
-    db_connect()
