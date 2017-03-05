@@ -39,10 +39,13 @@ def send_message(customer_name,customer_email):
     return requests.post(
     "https://api.mailgun.net/v3/sandbox8a8eabd810b540f5a7eca93aecbec851.mailgun.org/messages",
     auth=("api","key-22e20caa980e3fd1835b1105d6ea5e29"),
+    # files=[("attachment", open("rh.stl","rb")),("inline",open("rh.gif","rb"))],
+    files=[("attachment", open("rh_decim.stl.stl","rb")),("inline",open("rh.gif","rb"))],
     data={"from": "Brain Printing Service <mailgun@sandbox8a8eabd810b540f5a7eca93aecbec851.mailgun.org>",
             "to": [customer_email],
             "subject": "Your Brain Is On Its Way",
             "text": "Congratulations!!! You are one step way from your printed brain. Just bring the attached .stl file to the printer."}
+    #headers={'Content-type': 'multipart/form-data'}
     )
 
 
@@ -89,6 +92,7 @@ if __name__ == "__main__":
             df.loc[id]['status'] = 'email_started'
             df.to_csv(table_name,index=False)
             r = send_message(df.loc[id]['customerName'],df.loc[id]['customerEmail'])
+            print(r.status_code)
             if r.status_code == 200:
                 df.loc[id]['status'] = 'email_sent'
                 df.to_csv(table_name,index=False)
