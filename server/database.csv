@@ -1,0 +1,3 @@
+customerName,customerEmail,inputfile,outputfile,status
+John Smith, val_is_everywhere@yahoo.com, test_input, test_output,email_sent
+James Bond, val_is_everywhere@yahoo.com, test_input, test_output,email_sent
