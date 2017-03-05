@@ -6,9 +6,12 @@ const mongoose = require('mongoose');
 
 const requestSchema = new mongoose.Schema({
     customerEmail: { type: String,},
+    handleRequest:String,
     inputFile: String,
     outputFile: String,
     status: String,
+    originalname:String,
+    size:String,
     customerName: String
 
 }, { timestamps: true });
