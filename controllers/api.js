@@ -17,6 +17,8 @@ const paypal = require('paypal-rest-sdk');
 const Request = require('../models/Request');
 const lob = require('lob')(process.env.LOB_KEY);
 const ig = require('instagram-node').instagram();
+// Generate a v4 UUID (random)
+const uuidV4 = require('uuid/v4');
 const foursquare = require('node-foursquare')({
   secrets: {
     clientId: process.env.FOURSQUARE_ID,
@@ -590,19 +592,35 @@ exports.getFileUpload = (req, res, next) => {
 };
 
 exports.postFileUpload = (req, res, next) => {
-  const request = new Request({
-      customerEmail: req.user.email,
-      inputFile: req.file['path'],
-      outputFile:"",
-      status:"upload_finished",
-      customerName:req.user.profile.name
+
+  var files = req.files
+
+  var  handleRequest = uuidV4();
+
+
+    _.forEach(files, function(value, key) {
+        console.log(value, key);
+
+        const request = new Request({
+            handleRequest:handleRequest,
+            customerEmail: req.user.email,
+            inputFile: value['path'],
+            originalname:value['originalname'],
+            size:value['size'],
+            outputFile:"",
+            status:"upload_finished",
+            customerName:req.user.profile.name
+
+        });
+
+        request.save((err) => {
+            if (err) { return next(err); }
+
+        });
 
     });
 
-    request.save((err) => {
-        if (err) { return next(err); }
 
-    });
     req.flash('success', { msg: 'File was uploaded successfully.' });
     res.redirect('/api/upload');
 };
