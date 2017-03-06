@@ -2,6 +2,8 @@ import requests
 import pandas as pd
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import subprocess
+import os
 
 #################################
 #  Table format:
@@ -31,6 +33,9 @@ def process_request(request):
     """
 
     print("Processing request for "+request['customerEmail']+'.')
+    #TODO calling of real bash script goes here
+    p = subprocess.call(['/bin/sh',os.path.join(os.getcwd(),'sleeper.sh')],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
     return(True)
 
 
@@ -42,6 +47,7 @@ def send_message(customer_email):
     return requests.post(
     "https://api.mailgun.net/v3/sandbox8a8eabd810b540f5a7eca93aecbec851.mailgun.org/messages",
     auth=("api","key-22e20caa980e3fd1835b1105d6ea5e29"),
+    # comment out .stl version for now: send only gif
     # files=[("attachment", open("rh_decim.stl.stl","rb")),("inline",open("rh.gif","rb"))],
     files=[("inline",open("rh.gif","rb"))],
     data={"from": "Brain Printing Service <mailgun@sandbox8a8eabd810b540f5a7eca93aecbec851.mailgun.org>",
@@ -83,7 +89,7 @@ def ping_table(table):
 
 if __name__ == "__main__":
 
-    import threading
+    # import threading
     import time
 
     requests_table = db_connect()
