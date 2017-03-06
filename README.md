@@ -45,11 +45,13 @@ Change your working directory
 
     cd brainprinter
 
-    brew services start mongodb
-
 Start the Database (below command is for if you are using *homebrew*, for example)
 
     brew services start mongodb
+
+Then start the app
+ 
+    node app.js
 
 Open a browser, connect to [localhost:3000](localhost:3000)
 
@@ -69,16 +71,38 @@ Take a look at the current status
 ----
 ## How to set it up as a public webservice on AWS
 
-sudo apt-get update && sudo apt-get -y upgrade
 
-sudo apt install npm
+From a clean Ubuntu 16.04 instance (with open port 3000), follow the above instructions to set up locally. Some linux commands to help install things are below:
 
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-sudo apt-get install -y nodejs
+    sudo apt-get update && sudo apt-get -y upgrade
 
-sudo apt install mongodb
+    sudo apt install npm
 
-npm install
+    curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+    
+    sudo apt-get install -y nodejs
+
+    sudo apt install mongodb
+
+    npm install
+
+Then start the mongoDB
+
+    sudo service mongod start
+
+
+(if this doesn't work start it locally in a directory on the instance)
+
+    mongod -dbpath /srv/mongodb/
+
+Then start the app
+ 
+    node app.js
+   
+Then users should be able to navigate their browser to:
+
+http://[AWS instance address]:3000
+
 
 
 ----
