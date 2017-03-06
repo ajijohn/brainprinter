@@ -67,6 +67,15 @@ Take a look at the current status
 
     db.requests.find()
 
+To start the backend server app, first install a few Python prerequisites
+```
+cd server
+pip install -r requirements.txt
+```
+Then start the server with
+```
+python server.py
+```
 
 ----
 ## How to set it up as a public webservice on AWS
