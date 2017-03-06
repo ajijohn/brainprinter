@@ -84,7 +84,7 @@ From a clean Ubuntu 16.04 instance (with open port 3000), follow the above instr
 
     sudo apt install mongodb
 
-    npm install
+
 
 Then start the mongoDB
 
@@ -95,9 +95,28 @@ Then start the mongoDB
 
     mongod -dbpath /srv/mongodb/
 
+Clone the brainprinter repository
+    
+    git clone https://github.com/ajijohn/brainprinter
+
+Change your working directory
+
+    cd brainprinter    
+
+Install the dependencies 
+    
+    npm install
+
 Then start the app
  
-    node app.js
+    npm start
+
+if want to start as a background process
+ 
+    npm install -g forever
+    forever start app.js
+
+     
    
 Then users should be able to navigate their browser to:
 
