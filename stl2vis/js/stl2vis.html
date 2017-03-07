@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="http://threejs.org/build/three.min.js"></script>
+		<script src="http://threejs.org/examples/js/loaders/STLLoader.js"></script>
+		<script src="http://threejs.org/examples/js/controls/TrackballControls.js"></script>
+		<script>
+
+			var scene, camera, renderer;          															//var container, camera, scene, renderer;
+			var geometry, material, mesh;
+			var controls;
+
+			init();
+			animate();
+
+			function init() {
+
+				scene = new THREE.Scene();
+
+				camera=new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000);      //camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.set(3, 0.5, 500);
+				camera.fov *= 10000;
+				camera.updateProjectionMatrix();															   //camera.position.z = 1000;
+                scene.add(camera)
+				geometry = new THREE.BoxGeometry( 200, 200, 200 );
+														//additional
+				var material=new THREE.MeshBasicMaterial({ wireframe:true,color: 0xD3D3D3 });                   //material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );     ambient: 0xFBB917
+
+				mesh = new THREE.Mesh( geometry, material );
+				scene.add(mesh);
+
+				renderer=new THREE.WebGLRenderer({ antialias: true });											//renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				document.body.appendChild( renderer.domElement );
+
+				controls = new THREE.TrackballControls(camera);
+				controls.addEventListener('change', render );								//container.appendChild(renderer.domElement);
+			}																					                // document.body.appendChild(container);
+
+            function animate() {
+				requestAnimationFrame( animate );
+																												//	render();
+				//mesh.rotation.x += 0.01;
+				//mesh.rotation.y += 0.02;
+
+				//renderer.render(scene,camera);
+				render()
+				//stats.update();
+			}
+
+			// lights
+			scene.add(new THREE.AmbientLight(0x736F6E));
+
+			var directionalLight=new THREE.DirectionalLight(0xffffff, 1);
+			directionalLight.position=camera.position;
+			scene.add(directionalLight);
+
+			var loader = new THREE.STLLoader();
+            loader.load('http://localhost:8888/rh.stl', function ( geometry ) {
+			//loader.addEventListener('load', function (event){
+
+            	var material = new THREE.MeshPhongMaterial( { color: 0xD3D3D3 } );
+
+                var mesh = new THREE.Mesh( geometry, material );
+
+                scene.add( mesh );
+				controls.update();
+
+                } );
+
+
+			window.addEventListener('resize', onWindowResize, false);
+
+			function addLight(x, y, z, color, intensity){
+				var directionalLight=new THREE.DirectionalLight(color, intensity);
+				directionalLight.position.set(x, y, z)
+				scene.add(directionalLight);}
+
+			function onWindowResize(){
+				camera.aspect=window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth, window.innerHeight);}
+
+			function render(){
+				var timer=Date.now() * 0.0005;
+				r=150;
+				camera.position.x=r*Math.cos(timer);
+				camera.position.z=r*Math.sin(timer);
+				//camera.position.x+=0.01;
+				//camera.position.z+=0.1;;
+				camera.lookAt(scene.position);
+				//mesh.rotation.x += 0.01;
+                //mesh.rotation.y += 0.02;
+				renderer.render(scene, camera);
+				renderer.setClearColor(0xf5f5f5, 1);}
+
+		</script>
+
+		<div></div>
+	</body>
+
+
+</html>
